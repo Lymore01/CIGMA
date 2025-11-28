@@ -19,3 +19,11 @@ Content-Type: application/pdf
 
 ###
 GET {{base_url}}/documents
+
+###
+POST {{base_url}}/chat
+Content-Type: application/json
+
+{
+  "message": "Summarize the main points of the document."
+}

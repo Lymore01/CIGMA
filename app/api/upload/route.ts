@@ -26,7 +26,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error }, { status: 500 });
   }
 
-  const concatPath = `https://kklnyiejpkwoqozxgzlu.supabase.co/storage/v1/object/public/documents/${supabaseData.path}`;
+  const concatPath = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/documents/${supabaseData.path}`;
 
   const { data, error: insertError } = await addDocumentRecord({
     fileName: file.name,
