@@ -1,0 +1,21 @@
+@base_url=http://localhost:3000/api
+@file_path=D:/coding/hackathons/niru/cigma/documents/Socrate_Apology_Assignment.pdf
+
+###
+POST {{base_url}}/upload
+Content-Type: multipart/form-data; boundary=MyBoundary
+
+--MyBoundary
+Content-Disposition: form-data; name="service"
+Content-Type: text/plain
+
+Ministry of Education
+--MyBoundary
+Content-Disposition: form-data; name="file"; filename="Socrate_Apology_Assignment.pdf"
+Content-Type: application/pdf
+
+< {{file_path}}
+--MyBoundary--
+
+###
+GET {{base_url}}/documents
