@@ -1,69 +1,45 @@
-import { NextRequest, NextResponse } from "next/server";
+import { supabase } from '@/lib/supabase';
+import { addDocumentRecord } from '@/lib/supabase-insert';
+import { NextResponse } from 'next/server';
 
-export async function POST(request: NextRequest) {
-  try {
-    const formData = await request.formData();
-    const file = formData.get("file") as File;
+export async function POST(req: Request) {
+  const form = await req.formData();
+  const file = form.get('file') as File;
+  const service = form.get('service') as string;
 
-    if (!file) {
-      return NextResponse.json(
-        { error: "No file provided" },
-        { status: 400 }
-      );
-    }
-
-    // Validate file type
-    const allowedTypes = [
-      "application/pdf",
-      "application/msword",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      "text/plain",
-    ];
-    const allowedExtensions = [".pdf", ".doc", ".docx", ".txt", ".text"];
-
-    const fileExtension = "." + file.name.split(".").pop()?.toLowerCase();
-    const isValidType =
-      allowedTypes.includes(file.type) ||
-      allowedExtensions.includes(fileExtension);
-
-    if (!isValidType) {
-      return NextResponse.json(
-        { error: "Invalid file type. Only PDF, Word, and Text files are allowed." },
-        { status: 400 }
-      );
-    }
-
-    // Validate file size (max 10MB)
-    const maxSize = 10 * 1024 * 1024; // 10MB
-    if (file.size > maxSize) {
-      return NextResponse.json(
-        { error: "File size exceeds 10MB limit." },
-        { status: 400 }
-      );
-    }
-
-    // TODO: Here you would typically:
-    // 1. Save the file to storage (local filesystem, S3, etc.)
-    // 2. Extract text from the file using extract.service.ts
-    // 3. Chunk the text using chunking.service.ts
-    // 4. Generate embeddings using embedding.service.ts
-    // 5. Store in MongoDB using document.service.ts
-
-    // For now, return a success response with a mock document ID
-    const documentId = `doc-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-
-    return NextResponse.json({
-      id: documentId,
-      name: file.name,
-      type: file.type,
-      size: file.size,
-      message: "File uploaded successfully",
-    });
-  } catch (error) {
-    console.error("Upload error:", error);
-    return NextResponse.json(
-      { error: "Failed to upload file" },
-      { status: 500 }
-    );
+  if (!file || !(file instanceof File)) {
+    return NextResponse.json({ error: 'Invalid file upload' }, { status: 400 });
   }
+
+  const filePath = `uploads/${Date.now()}-${file.name}`;
+
+  const { data: supabaseData, error } = await supabase.storage
+    .from('documents')
+    .upload(filePath, file, {
+      cacheControl: '3600',
+      contentType: file.type,
+      upsert: false,
+    });
+
+  if (error) {
+    console.error('SUPABASE ERROR:', error);
+    return NextResponse.json({ error }, { status: 500 });
+  }
+
+  const concatPath = `https://kklnyiejpkwoqozxgzlu.supabase.co/storage/v1/object/public/documents/${supabaseData.path}`;
+
+  const { data, error: insertError } = await addDocumentRecord({
+    fileName: file.name,
+    filePath: concatPath,
+    fileType: file.type,
+    fileSize: file.size.toString(),
+    service,
+  });
+
+  if (insertError) {
+    console.error('SUPABASE INSERT ERROR:', error);
+    return NextResponse.json({ insertError }, { status: 500 });
+  }
+
+  return NextResponse.json({ success: true, data });
 }
