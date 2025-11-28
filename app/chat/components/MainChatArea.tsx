@@ -1,21 +1,53 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import ChatInterface from "./ChatInterface";
+import React, { useState } from 'react';
+import ChatInterface from './ChatInterface';
 
 const MainChatArea = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const [initialMessage, setInitialMessage] = useState("");
+  const [initialMessage, setInitialMessage] = useState('');
 
   const suggestedActions = [
-    { icon: "💰", label: "Finance & Budget" },
-    { icon: "💳", label: "Payment" },
-    { icon: "📊", label: "Track your expense" },
-    { icon: "👤", label: "Account" },
+    {
+      icon: '🏛️',
+      label: 'Government Services',
+      description: 'KRA, NHIF, NSSF, Passport',
+      color: 'from-blue-500 to-blue-600',
+    },
+    {
+      icon: '📋',
+      label: 'Legal Documents',
+      description: 'Laws, regulations, policies',
+      color: 'from-indigo-500 to-indigo-600',
+    },
+    {
+      icon: '🏥',
+      label: 'Health Services',
+      description: 'NHIF, hospitals, health info',
+      color: 'from-green-500 to-green-600',
+    },
+    {
+      icon: '💼',
+      label: 'Business & Taxes',
+      description: 'Business registration, KRA',
+      color: 'from-purple-500 to-purple-600',
+    },
+    {
+      icon: '🎓',
+      label: 'Education',
+      description: 'Schools, scholarships, exams',
+      color: 'from-orange-500 to-orange-600',
+    },
+    {
+      icon: '🏠',
+      label: 'Housing & Land',
+      description: 'Land registration, housing',
+      color: 'from-teal-500 to-teal-600',
+    },
   ];
 
   const handleActionClick = (label: string) => {
-    setInitialMessage(label);
+    setInitialMessage(`Tell me about ${label.toLowerCase()}`);
     setIsChatOpen(true);
   };
 
@@ -26,81 +58,45 @@ const MainChatArea = () => {
         initialMessage={initialMessage}
         onNewChat={() => {
           setIsChatOpen(false);
-          setInitialMessage("");
+          setInitialMessage('');
         }}
       />
     );
   }
 
   return (
-    <div className="flex-1 bg-white rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8 relative overflow-hidden min-h-[500px] flex flex-col">
-      <div className="flex items-center justify-between mb-8">
+    <div className="flex-1 bg-white rounded-2xl shadow-xl p-3 sm:p-4 relative overflow-hidden min-h-[500px] flex flex-col border border-gray-100">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-3 sm:mb-4">
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 bg-linear-to-br from-blue-500 to-purple-600 rounded flex items-center justify-center">
-            <div className="w-3 h-3 bg-white rounded-full"></div>
+          <div className="w-8 h-8 bg-linear-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center shadow-md">
+            <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center">
+              <div className="w-2.5 h-2.5 bg-blue-500 rounded-full animate-pulse"></div>
+            </div>
           </div>
-          <span className="text-lg font-bold text-gray-800">CIGMA</span>
-          <svg
-            className="w-4 h-4 text-gray-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
+          <div>
+            <span className="text-lg font-bold text-gray-900">CIGMA</span>
+            <p className="text-[10px] text-gray-600">Civic Assistant</p>
+          </div>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors">
-          <svg
-            className="w-5 h-5 text-gray-600"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
-            />
-          </svg>
-          <span className="text-sm font-medium text-gray-700">Share</span>
-        </button>
       </div>
 
-      <div className="flex flex-col items-center justify-center flex-1 min-h-[300px] sm:min-h-[400px]">
-        <div className="relative mb-8">
-          <div className="w-32 h-32 relative">
-            <div className="absolute inset-0 bg-linear-to-br from-blue-400 to-purple-500 rounded-full"></div>
-            <div className="absolute inset-2 bg-linear-to-br from-blue-300 to-purple-400 rounded-full"></div>
-            <div className="absolute top-4 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-white rounded-full flex items-center justify-center">
-              <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
-            </div>
-            <div className="absolute top-6 right-6 w-6 h-6 bg-white rounded-full flex items-center justify-center">
-              <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-            </div>
-            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 w-16 h-12 bg-blue-200 rounded-full"></div>
-            <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-20 h-6 bg-purple-300 rounded-full"></div>
-            <div className="absolute top-2 left-1/2 transform -translate-x-1/2 w-3 h-3 bg-purple-400 rounded-full"></div>
-          </div>
-        </div>
-
-        <h2 className="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-800 mb-8 sm:mb-12 text-center px-4">
+      {/* Main Content */}
+      <div className="flex flex-col items-center justify-center flex-1 overflow-hidden">
+        {/* Welcome Message */}
+        <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-1 sm:mb-2 text-center px-4">
           How can I help you today?
         </h2>
 
-        <div className="w-full max-w-2xl mb-6">
+        {/* Search Input */}
+        <div className="w-full max-w-2xl mb-3 sm:mb-4">
           <div className="relative">
             <input
               type="text"
-              placeholder="Chat here.."
-              className="w-full pl-12 pr-4 py-4 bg-gray-50 text-gray-800 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              placeholder="Ask about KRA, NHIF, passports, or any government service..."
+              className="w-full pl-12 pr-4 py-2.5 sm:py-3 bg-gray-50 text-gray-900 placeholder:text-gray-500 rounded-xl border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm transition-all"
               onKeyPress={(e) => {
-                if (e.key === "Enter" && e.currentTarget.value.trim()) {
+                if (e.key === 'Enter' && e.currentTarget.value.trim()) {
                   setInitialMessage(e.currentTarget.value);
                   setIsChatOpen(true);
                 }
@@ -113,10 +109,11 @@ const MainChatArea = () => {
             />
             <button
               onClick={() => setIsChatOpen(true)}
-              className="absolute left-4 top-1/2 transform -translate-y-1/2 w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300 transition-colors"
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center hover:bg-blue-600 transition-colors"
+              aria-label="Start chat"
             >
               <svg
-                className="w-4 h-4 text-gray-600"
+                className="w-4 h-4 text-white"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -125,26 +122,38 @@ const MainChatArea = () => {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M12 4v16m8-8H4"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                 />
               </svg>
             </button>
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-2 sm:gap-3 justify-center max-w-2xl px-4">
-          {suggestedActions.map((action, index) => (
-            <button
-              key={index}
-              onClick={() => handleActionClick(action.label)}
-              className="flex items-center gap-2 px-4 py-2.5 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors border border-gray-200"
-            >
-              <span className="text-lg">{action.icon}</span>
-              <span className="text-sm font-medium text-gray-700">
-                {action.label}
-              </span>
-            </button>
-          ))}
+        {/* Suggested Actions */}
+        <div className="w-full max-w-4xl flex-1 flex flex-col min-h-0">
+          <p className="text-xs font-semibold text-gray-700 mb-2 text-center">
+            Popular Topics:
+          </p>
+          <div className="grid grid-cols-3 sm:grid-cols-3 gap-1.5 sm:gap-2 px-2 sm:px-4 flex-1">
+            {suggestedActions.map((action, index) => (
+              <button
+                key={index}
+                onClick={() => handleActionClick(action.label)}
+                className="group flex flex-col items-center justify-center gap-1 p-2 sm:p-2.5 bg-white rounded-lg hover:shadow-sm transition-all border border-gray-200 hover:border-blue-300 active:scale-95"
+              >
+                <div
+                  className={`w-8 h-8 sm:w-9 sm:h-9 bg-linear-to-br ${action.color} rounded-lg flex items-center justify-center text-base sm:text-lg shadow-sm group-hover:scale-105 transition-transform`}
+                >
+                  {action.icon}
+                </div>
+                <div className="text-center w-full">
+                  <span className="text-[10px] sm:text-xs font-semibold text-gray-900 block truncate leading-tight">
+                    {action.label}
+                  </span>
+                </div>
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </div>
